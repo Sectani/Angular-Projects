@@ -1,0 +1,22 @@
+.icon-hover:hover {
+    border-color: #030303 !important;
+    background-color: white !important;
+  }
+  
+  .icon-hover:hover i {
+    color: #060606 !important;
+  }
+
+  .spn{
+    font-size: 28px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .spn2{
+    font-size: 50px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+
+  .p1{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }

@@ -1,0 +1,158 @@
+<!-- Jumbotron -->
+<div class="p-3 text-center bg-white border-bottom">
+    <div class="container">
+        <div class="row gy-3">
+        <!-- Left elements -->
+        <div class="col-lg-2 col-sm-4">
+            <i class="fas fa-shopping-cart me-2 "></i>
+            <span class="spn">Jiso Store</span>      
+        </div>
+        <!-- Left elements -->
+
+        <!-- Center elements -->
+        <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+            <div class="d-flex float-end">
+            <a (click)="logout()" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+                <i class="fas fa-sign-out-alt m-1 me-md-2"></i>
+                <p class="d-none d-md-block mb-0">Sign out</p>
+            </a>
+            </div>
+        </div>
+        <!-- Center elements -->
+
+        <!-- Right elements -->
+        <div class="col-lg-5 col-md-12 col-12">
+        </div>
+        <!-- Right elements -->
+        </div>
+    </div>
+    </div>
+    <!-- Jumbotron -->
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <!-- Container wrapper -->
+        <div class="container justify-content-center justify-content-md-between">
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse">
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link text-white-50" routerLink="/home"><strong>Home</strong></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white-50" routerLink="/products"><strong>Products List</strong></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" routerLink="/admin"><strong>Manage Products</strong></a>
+            </li>
+            </ul>
+            <!-- Left links -->
+        </div>
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+
+
+
+<!-- cart + summary -->
+<section class="bg-light">
+    <div class="container">
+    <div class="row">
+        <!-- cart -->
+        <div class="col">
+        <div class="card border shadow-0">
+            <div class="m-4">
+            <nav class="border rounded mb-2">
+                <button (click)="goToOffers(false)" class="btn btn-outline-dark shadow-0 me-1 p-2 m-2">
+                    <strong>Manage Products</strong>
+                </button> 
+                <button (click)="goToOffers(true)" class="btn btn-outline-dark shadow-0 me-1 p-2 m-2">
+                    <strong>Manage Offers</strong>
+                </button>
+                <button *ngIf="isOffers == false"  routerLink="/admin/add" class="btn btn-outline-dark shadow-0 me-1 p-2 m-2" style="flex: auto;">
+                    <strong>Add Product</strong>
+                </button> 
+                <button *ngIf="isOffers == true" class="btn btn-outline-dark shadow-0 me-1 p-2 m-2" style="align-self: flex-end;">
+                    <strong>Add Offer</strong>
+                </button>                       
+            </nav>
+            <div *ngIf="isOffers == false">
+            <div class="row gy-3 mb-4" *ngFor="let p of products">
+                <div class="col-lg-5">
+                <div class="me-lg-5">
+                    <div class="d-flex">
+                    <img [src]="p.productImage" class="border rounded me-3" style="width: 96px; height: 96px;" />
+                    <div class="">
+                        <a class="nav-link"><strong>{{p.productTitle}}</strong></a>
+                        <p class="text-muted">{{p.productPrice | currency : 'MAD'}}</p>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                <div class="float-md-end">
+                    <button routerLink="/admin/edit/{{p.productId}}"  class="btn btn-light border text-dark me-1"> <i class="fas fa-edit"></i></button>
+                    <button (click)="deleteProduct(p)" class="btn btn-light border text-danger"> <i class="fas fa-trash"></i></button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div *ngIf="isOffers == true">
+                <div class="row gy-3 mb-4" *ngFor="let o of offers">
+                    <div class="col-lg-5">
+                    <div class="me-lg-5">
+                        <div class="d-flex">
+                        <img [src]="o.offerImage" class="border rounded me-3" style="width: 96px; height: 96px;" />
+                        <div class="">
+                            <a class="nav-link"><strong>{{o.offerTitle}}</strong></a>
+                            <p class="text-muted">{{o.offerDescription}}</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                    <div class="float-md-end">
+                        <button *ngIf="o.isActive == true" class="btn btn-success border text-dark me-1" (click)="setOfferStatus(o,true)">Activated</button>
+                        <button *ngIf="o.isActive == false" class="btn btn-danger border text-dark me-1" (click)="setOfferStatus(o,false)">Desactivated</button>
+                        <button  class="btn btn-light border text-dark me-1"> <i class="fas fa-edit"></i></button>
+                        <button (click)="deleteOffer(o)" class="btn btn-light border text-danger"> <i class="fas fa-trash"></i></button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+            </div>    
+        </div>
+        </div>
+        <!-- cart -->
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+            <ul class="pagination">
+            <li *ngIf="currentPage > 0" class="page-item">
+                <button (click)="goToPage(currentPage - 1)" class="page-link text-dark">
+                &laquo;
+                </button>
+            </li>
+            
+            <ng-container *ngIf="totalPages > 0">
+                <ng-container *ngFor="let i of generateRange(currentPage,currentPage+5)">
+                <li class="page-item">
+                    <button (click)="goToPage(i)" [ngClass]="i === currentPage ? 'bg-dark text-white page-link' : 'text-dark page-link'">{{ i+1 }}</button>
+                </li>
+                </ng-container>
+            </ng-container>
+            
+            <li *ngIf="currentPage < totalPages - 1" class="page-item">
+                <button (click)="goToPage(currentPage + 1)" class="page-link text-dark">
+                &raquo;
+                </button>
+            </li>
+            </ul>
+        </nav>
+        <!-- Pagination -->
+    </div>
+    </div>
+</section>

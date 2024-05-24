@@ -1,0 +1,451 @@
+<!--Main Navigation-->
+<header>
+  <!-- Jumbotron -->
+  <div class="p-3 text-center bg-white border-bottom">
+    <div class="container">
+      <div class="row gy-3">
+        <!-- Left elements -->
+        <div class="col-lg-2 col-sm-4 col-4">
+          <i class="fas fa-shopping-cart me-2 "></i>
+          <span class="spn">Jiso Store</span>
+        </div>
+        <!-- Left elements -->
+
+        <!-- Center elements -->
+        <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+          <div class="d-flex float-end">
+            <a *ngIf="user.role == 'admin'" routerLink="/admin" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+              <i class="fa fa-cog m-1 me-md-2" aria-hidden="true"></i><p class="d-none d-md-block mb-0">Manage</p>
+            </a>
+            <a *ngIf="user.role=='guest'" routerLink="/cart" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Cart</p> </a>
+            <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/cart" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My Cart</p> </a>
+            <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/wishlist" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
+
+            <a *ngIf="user.role=='guest'" routerLink="/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+              <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Sign Up</p>
+            </a>
+            <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/account" class="nav-link d-flex align-items-center">
+              <i class="fas fa-user-alt m-1 me-md-2"></i>
+            </a>
+            <a style="cursor: pointer;" (click)="logout()" *ngIf="user.role=='admin' || user.role=='user'" class=" nav-link d-flex align-items-center">
+              <i class="fas fa-sign-out-alt m-1 me-md-2"></i><!--p class="d-none d-md-block mb-0">Sign out</p-->
+            </a>
+          </div>
+        </div>
+        <!-- Center elements -->
+
+        <!-- Right elements -->
+        <div class="col-lg-5 col-md-12 col-12">
+          <form [formGroup] = "searchFormGroup" (ngSubmit)="GetSearchProducts()">
+          <div class="input-group float-center">
+            <div class="form-outline">
+              <input type="search" id="form1" class="form-control" placeholder="Search" formControlName="Keyword"/>
+            </div>
+            <button class="btn btn-dark shadow-0">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+        </div>
+        <!-- Right elements -->
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <!-- Container wrapper -->
+    <div class="container justify-content-center justify-content-md-between">
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link text-white-50" routerLink="/home"><strong>Home</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/products"><strong>Products List</strong></a>
+          </li>
+        </ul>
+        <!-- Left links -->
+      </div>
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+</header>
+
+<br>
+
+<!-- sidebar + content -->
+<section class="">
+  <div class="container">
+    <div class="row">
+      <!-- sidebar -->
+      <div class="col-lg-3">
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+          <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  <strong>Categories</strong>
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                <div class="accordion-body">
+                  <ul class="navbar-nav">
+                    <li>
+                      <a (click)="GetPageProducts()" class="nav-link" style=" cursor: pointer;"> All </a>
+                    </li>
+                    <li *ngFor="let c of getCategories()">
+                      <a (click)="GetByCategory(c)" class="nav-link" style=" cursor: pointer;"> {{c}} </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            </div>
+            </div>
+
+            <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+              <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                      <strong>Price</strong>
+                    </button>
+                  </h2>
+                  <form [formGroup] = "searchFormGroup" (ngSubmit)="GetByPrice()">
+                  <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo">
+                    <div class="accordion-body">
+                      <div class="range">
+                        <input type="range" class="form-range"/>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-6">
+                          <p class="mb-0">
+                            Min
+                          </p>
+                          <div class="form-outline">
+                            <input type="number" formControlName="min" min="0" class="form-control" />
+                            <label class="form-label" for="typeNumber">00,00 MAD</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <p class="mb-0">
+                            Max
+                          </p>
+                          <div class="form-outline">
+                            <input type="number" formControlName="max" min="1" max="500000" class="form-control" />
+                            <label class="form-label" for="typeNumber">500 000 MAD</label>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-outline-dark shadow-0 w-100 border border-secondary">
+                        apply
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
+            </div>
+
+
+            <!--div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+              <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                      <strong>Size</strong>
+                    </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+                    <div class="accordion-body">
+                      <input type="checkbox" class="btn-check border justify-content-center" id="btn-check1" checked autocomplete="off" />
+                      <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check1">XS</label>
+                      <input type="checkbox" class="btn-check border justify-content-center" id="btn-check2" checked autocomplete="off" />
+                      <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check2">SM</label>
+                      <input type="checkbox" class="btn-check border justify-content-center" id="btn-check3" checked autocomplete="off" />
+                      <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check3">LG</label>
+                      <input type="checkbox" class="btn-check border justify-content-center" id="btn-check4" checked autocomplete="off" />
+                      <label class="btn btn-white mb-1 px-1" style="width: 60px;" for="btn-check4">XXL</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div-->
+
+            <!--div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+              <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                      <strong>Rating</strong>
+                    </button>
+                  </h2>
+                  <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingFour">
+                    <div class="accordion-body">
+  
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+                          <i class="fas fa-star text-warning"></i>
+                        </label>
+                      </div>
+                    
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+                          <i class="fas fa-star text-secondary"></i>
+                        </label>
+                      </div>
+                     
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i>
+                          <i class="fas fa-star text-secondary"></i>
+                        </label>
+                      </div>
+                    
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i>
+                          <i class="fas fa-star text-secondary"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div-->
+
+      </div>
+      <!-- sidebar -->
+      <!-- content -->
+      <div class="col-lg-9">
+        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+          <!--strong class="d-block py-2">{{products.length}} Items found </strong-->
+          <div class="ms-auto">
+            <select class="form-select d-inline-block w-auto border pt-1 me-2">
+              <option value="0">Best match</option>
+              <option value="1">Recommended</option>
+              <option value="2">High rated</option>
+              <option value="3">Randomly</option>
+            </select>
+            <div class="btn-group shadow-0 border">
+              <button (click)="handleView('list')" [ngClass]="view=='list'?'btn-light active' : 'btn-light'" class="btn btn-light" title="List view">
+                <i class="fa fa-bars fa-lg"></i>
+              </button>
+              <button (click)="handleView('grid')" [ngClass]="view=='grid'?'btn-light active' : 'btn-light'" class="btn btn-light" title="Grid view">
+                <i class="fa fa-th fa-lg"></i>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div *ngIf="view=='grid'" class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 d-flex" *ngFor="let p of products">
+          <div class="card w-100 my-2 shadow-2-strong">
+            <a routerLink="/details/{{p.productId}}">
+              <img [src]="p.productImage" class="card-img-top" style="aspect-ratio: 1 / 1" />
+            </a>
+            <div class="card-body d-flex flex-column">
+              <a routerLink="/details/{{p.productId}}" class="nav-link text-dark">
+                <h3 class="card-title">{{p.productTitle}}</h3>
+              </a>
+              <p class="card-text text-danger" style="font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                {{p.productPrice | currency : 'MAD'}}
+              </p>
+              <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                <button (click)="addToCart(p)" class="btn btn-outline-dark shadow-0 me-1" type="button"><strong>ADD TO CART</strong></button>
+                <a (click)="addToWishlist(p)" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div *ngIf="view=='list'" class="row justify-content-center mb-3">
+          <div *ngFor="let p of products" class="col-md-12">
+            <div class="card shadow-0 border rounded-3">
+              <div class="card-body">
+                <div class="row g-0">
+                  <div class="col-xl-3 col-md-4 d-flex justify-content-center">
+                    <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                      <a routerLink="/details/{{p.productId}}">
+                        <img [src]="p.productImage" class="w-100" />
+                      </a>
+                      <a routerLink="/details/{{p.productId}}">
+                        <div class="hover-overlay">
+                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-md-5 col-sm-7">
+                    <a routerLink="/details" class="nav-link text-dark">
+                      <h2 class="card-title">{{p.productTitle}}</h2>
+                    </a>
+                    <div class="d-flex flex-row">
+                      <div class="text-warning mb-1 me-2">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span class="ms-1">
+                          4.5
+                        </span>
+                      </div>
+                      <span class="text-muted">0 orders</span>
+                    </div>
+                    
+                  </div>
+                  <div class="col-xl-3 col-md-3 col-sm-5">
+                    <div class="d-flex flex-row align-items-center mb-1">
+                      <h4 class="mb-1 me-1">{{p.productPrice | currency : 'MAD'}}</h4>
+                      <span class="text-danger"><s>00.00 DH</s></span>
+                    </div>
+                    <h6 class="text-success">Free shipping</h6>
+                    <div class="mt-4">
+                      <button (click)="addToCart(p)" class="btn btn-outline-dark shadow-0 me-1"><strong>ADD TO CART</strong></button>
+                      <button (click)="addToWishlist(p)" class="btn btn-light border px-2 pt-2 icon-hover me-2"><i class="fas fa-heart text-secondary fa-lg px-1"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr />
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+          <ul class="pagination">
+            <li *ngIf="currentPage > 0" class="page-item">
+              <button (click)="goToPage(currentPage - 1)" class="page-link text-dark">
+                &laquo;
+              </button>
+            </li>
+
+            <ng-container *ngIf="totalPages > 0">
+              <ng-container *ngFor="let i of generateRange(currentPage,currentPage+5)">
+                <li class="page-item">
+                  <button (click)="goToPage(i)" [ngClass]="i === currentPage ? 'bg-dark text-white page-link' : 'text-dark page-link'">{{ i+1 }}</button>
+                </li>
+              </ng-container>
+            </ng-container>
+
+            <li *ngIf="currentPage < totalPages - 1" class="page-item">
+              <button (click)="goToPage(currentPage + 1)" class="page-link text-dark">
+                &raquo;
+              </button>
+            </li>
+          </ul>
+        </nav>
+        <!-- Pagination -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature -->
+<section class="mt-5" style="background-color: #f5f5f5;">
+  <div class="container text-dark pt-3">
+    <header class="pt-4 pb-3">
+      <h2>Why choose us</h2>
+    </header>
+
+    <div class="row mb-4">
+      <div class="col-lg-4 col-md-6">
+        <figure class="d-flex align-items-center mb-4">
+          <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+            <i class="fas fa-camera-retro fa-2x fa-fw text-dark floating"></i>
+          </span>
+          <figcaption class="info">
+            <h3 class="title">Reasonable prices</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+          </figcaption>
+        </figure>
+        <!-- itemside // -->
+      </div>
+      <!-- col // -->
+      <div class="col-lg-4 col-md-6">
+        <figure class="d-flex align-items-center mb-4">
+          <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+            <i class="fas fa-star fa-2x fa-fw text-dark floating"></i>
+          </span>
+          <figcaption class="info">
+            <h3 class="title">Best quality</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+          </figcaption>
+        </figure>
+        <!-- itemside // -->
+      </div>
+      <!-- col // -->
+      <div class="col-lg-4 col-md-6">
+        <figure class="d-flex align-items-center mb-4">
+          <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+            <i class="fas fa-plane fa-2x fa-fw text-dark floating"></i>
+          </span>
+          <figcaption class="info">
+            <h3 class="title">Worldwide shipping</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+          </figcaption>
+        </figure>
+        <!-- itemside // -->
+      </div>
+      <!-- col // -->
+      <div class="col-lg-4 col-md-6">
+        <figure class="d-flex align-items-center mb-4">
+          <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+            <i class="fas fa-users fa-2x fa-fw text-dark floating"></i>
+          </span>
+          <figcaption class="info">
+            <h3 class="title">Customer satisfaction</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+          </figcaption>
+        </figure>
+        <!-- itemside // -->
+      </div>
+      <!-- col // -->
+      <div class="col-lg-4 col-md-6">
+        <figure class="d-flex align-items-center mb-4">
+          <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+            <i class="fas fa-thumbs-up fa-2x fa-fw text-dark floating"></i>
+          </span>
+          <figcaption class="info">
+            <h3 class="title">Happy customers</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+          </figcaption>
+        </figure>
+        <!-- itemside // -->
+      </div>
+      <!-- col // -->
+      <div class="col-lg-4 col-md-6">
+        <figure class="d-flex align-items-center mb-4">
+          <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+            <i class="fas fa-box fa-2x fa-fw text-dark floating"></i>
+          </span>
+          <figcaption class="info">
+            <h3 class="title">Thousand items</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+          </figcaption>
+        </figure>
+        <!-- itemside // -->
+      </div>
+      <!-- col // -->
+    </div>
+  </div>
+  <!-- container end.// -->
+</section>
+<!-- Feature -->
