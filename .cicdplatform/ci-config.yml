@@ -1,0 +1,42 @@
+version: '1.0'
+
+jobs:
+
+  runs-on: node-ci-base:latest
+
+  test:
+    depends-on: install
+    steps:
+      - name: Clone repo
+        run: git clone https://github.com/Sectani/Angular-Projects app
+
+      - name: Install dependencies
+        working-directory: app/Jiso Store/Frontend
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+ build:
+   depends-on: test
+   steps:
+     - name: Clone repo
+       run: git clone https://github.com/Sectani/Angular-Projects app
+
+     - name: Install dependencies
+       working-directory: app/Jiso Store/Frontend
+       run: npm ci
+
+     - name: Build
+       run: npm run build || echo "No build script defined"
+
+     - name: Copy artifacts
+       run: cp -r build /artifacts/
+
+ deploy_staging:
+   depends-on: build
+   steps:
+     - name: Deploy to staging
+       run: echo "Deploying..." # your deploy commands
+
+
