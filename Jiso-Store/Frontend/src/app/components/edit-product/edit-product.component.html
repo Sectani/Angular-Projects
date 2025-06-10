@@ -1,0 +1,51 @@
+<div class="container mt-3 col-md-6 offset-md-3">
+    <form [formGroup]="productFormGroup" (ngSubmit)="EDIT()">
+        <div class="mb-3">
+            <label class="form-label">
+                <strong>Title</strong>
+            </label>
+            <input type="text" formControlName="productTitle" class="form-control" placeholder="Title">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                <strong>Price</strong>
+            </label>
+            <input type="number" formControlName="productPrice" class="form-control" placeholder="Price">
+        </div>
+        <div class="mb-3">
+            <label class="me-2 form-label">
+                <strong>Image</strong>
+            </label>
+            <ul>
+                <li>
+                    <a [ngClass]="selectedOption!='url'?'text-muted nav-link' : 'text-dark nav-link'" style=" cursor: pointer;" (click)="onSelectOption('url')">Type url</a>  
+                </li>
+                <li>
+                    <a [ngClass]="selectedOption!='file'?'text-muted nav-link' : 'text-dark nav-link'" style=" cursor: pointer;" (click)="onSelectOption('file')">Upload image</a> 
+                </li>
+            </ul>
+            <input *ngIf="selectedOption=='file'" type="file" formControlName="productImage" class="form-control">
+            <input *ngIf="selectedOption=='url'" type="text" formControlName="productImage" class="form-control" placeholder="Url">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                <strong>Category</strong>
+            </label>
+            <input type="text" formControlName="productCategory" class="form-control" placeholder="Category">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                <strong>Quantity</strong>
+            </label>
+            <input type="number" formControlName="productQuantity" class="form-control" placeholder="Quantity">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                <strong>Details</strong>
+            </label>
+            <textarea type="te" formControlName="details" class="form-control" placeholder="Enter description of this product"></textarea>
+        </div>
+        <button [disabled]="productFormGroup.invalid"  class="btn btn-outline-dark shadow-0 me-2" style="width: 80px;"><strong>EDIT</strong></button>
+        <button (click)="cancel()" class="btn btn-light border"><strong>CANCEL</strong></button>
+    </form>
+</div>

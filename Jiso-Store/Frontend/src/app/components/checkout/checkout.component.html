@@ -1,0 +1,262 @@
+<header>
+     <!-- Jumbotron -->
+     <div class="p-3 text-center bg-white border-bottom">
+        <div class="container">
+          <div class="row gy-3">
+            <!-- Left elements -->
+            <div class="col-lg-2 col-sm-4 col-4">
+                <i class="fas fa-shopping-cart me-2 "></i>
+              <span class="spn">Jiso Store</span>      
+            </div>
+            <!-- Left elements -->
+    
+            <!-- Center elements -->
+            <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+              <div class="d-flex float-end">
+                <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/cart" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+                  <i class="fas fa-shopping-cart m-1 me-md-2"></i>
+                  <p class="d-none d-md-block mb-0">My cart</p>
+                </a>
+                <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/wishlist" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+                  <i class="fas fa-heart m-1 me-md-2"></i>
+                  <p class="d-none d-md-block mb-0">Wishlist</p>
+                </a>
+                <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/account" class="nav-link d-flex align-items-center">
+                  <i class="fas fa-user-alt m-1 me-md-2"></i>
+                </a>
+                <a style="cursor: pointer;" (click)="logout()" *ngIf="user.role=='admin' || user.role=='user'" class=" nav-link d-flex align-items-center">
+                  <i class="fas fa-sign-out-alt m-1 me-md-2"></i><!--p class="d-none d-md-block mb-0">Sign out</p-->
+                </a>
+                <a *ngIf="user.role=='guest'" routerLink="/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+                  <i class="fas fa-user-alt m-1 me-md-2"></i>
+                  <p class="d-none d-md-block mb-0">Sign in</p>
+                </a>
+              </div>
+            </div>
+            <!-- Center elements -->
+    
+            <!-- Right elements -->
+            <div class="col-lg-5 col-md-12 col-12">
+            </div>
+            <!-- Right elements -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <!-- Container wrapper -->
+    <div class="container justify-content-center justify-content-md-between">
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link text-white-50" routerLink="/home"><strong>Home</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50" routerLink="/products"><strong>Products List</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50" routerLink="/cart"><strong>Shoping cart</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/checkout"><strong>Order info</strong></a>
+          </li>
+        </ul>
+        <!-- Left links -->
+      </div>
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  </header>
+  
+  <section class="bg-light py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-8 col-lg-8 mb-4">
+          <div *ngIf="user.role=='guest'" class="card mb-4 border shadow-0">
+            <div class="p-4 d-flex justify-content-between">
+              <div class="">
+                <h2>Have an account?</h2>
+                <p class="mb-0 text-wrap ">Having an account is necessary to comlepte this purchase</p>
+              </div>
+              <div class="d-flex align-items-center justify-content-center flex-column flex-md-row">
+                <a routerLink="/login" class="btn btn-outline-dark me-0 me-md-2 mb-2 mb-md-0 w-100">Register</a>
+                <a routerLink="/login" class="btn btn-dark shadow-0 text-nowrap w-100">Sign in</a>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="user.role=='admin' || user.role=='user'" class="card mb-4 border shadow-0">
+            <div class="p-4 d-flex justify-content-between">
+              <div class="">
+                <h2>Mr {{user.userName}}</h2>
+                <p class="mb-0 text-wrap ">Please verify your informations carefully</p>
+              </div>
+            </div>
+          </div>
+          <!-- Checkout -->
+          <form [formGroup]="form" (ngSubmit)="Purchase()">
+          <div class="card shadow-0 border">
+            <div class="p-4">
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <p class="mb-0">First name</p>
+                  <div class="form-outline">
+                    <input type="text" formControlName="firstName" placeholder="Type here" class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-6">
+                  <p class="mb-0">Last name</p>
+                  <div class="form-outline">
+                    <input type="text" formControlName="lastName" placeholder="Type here" class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-6 mb-3">
+                  <p class="mb-0">Phone</p>
+                  <div class="form-outline">
+                    <input type="tel" formControlName="phone" value="+212 " class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-6 mb-3">
+                  <p class="mb-0">Email</p>
+                  <div class="form-outline">
+                    <input type="email" formControlName="email" placeholder="example@gmail.com" class="form-control" />
+                  </div>
+                </div>
+              </div>
+  
+              <hr class="my-4" />
+  
+              <h4 class="card-title mb-3">Shipping info</h4>
+  
+              <div class="row mb-3">
+                <div class="col-lg-4 mb-3">
+                  <!-- Default checked radio -->
+                  <div class="form-check h-100 border rounded-3">
+                    <div class="p-3">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked />
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Express delivery <br />
+                        <small class="text-muted">3-4 days via Fedex </small>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <!-- Default radio -->
+                  <div class="form-check h-100 border rounded-3">
+                    <div class="p-3">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                      <label class="form-check-label" for="flexRadioDefault2">
+                        Post office <br />
+                        <small class="text-muted">20-30 days via post </small>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <!-- Default radio -->
+                  <div class="form-check h-100 border rounded-3">
+                    <div class="p-3">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" />
+                      <label class="form-check-label" for="flexRadioDefault3">
+                        Self pick-up <br />
+                        <small class="text-muted">Come to our shop </small>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-sm-8 mb-3">
+                  <p class="mb-0">Address</p>
+                  <div class="form-outline">
+                    <input type="text" formControlName="address" placeholder="address" class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-sm-4 mb-3">
+                  <p class="mb-0">City</p>
+                  <div class="form-outline">
+                    <input type="text" formControlName="city" placeholder="city" class="form-control" />
+                  </div>
+                </div>
+  
+                <div class="col-sm-4 col-6 mb-3">
+                  <p class="mb-0">Postal code</p>
+                  <div class="form-outline">
+                    <input type="text" formControlName="postalCode" placeholder="postal code" class="form-control" />
+                  </div>
+                </div>
+              </div>
+  
+              <div class="mb-3">
+                <p class="mb-0">Message to seller</p>
+                <div class="form-outline">
+                  <textarea class="form-control" formControlName="message" rows="2"></textarea>
+                </div>
+              </div>
+  
+              <div class="float-end">
+                <button (click)="Cancel()" class="btn btn-light border me-1">Cancel</button>
+                <button [disabled]="form.invalid" type="submit" class="btn btn-dark shadow-0 border">Continue</button>
+              </div>
+            </div>
+          </div>
+        </form>
+          <!-- Checkout -->
+        </div>
+        <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+          <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+            <h3 class="mb-3">Summary</h3>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Total price:</p>
+              <p class="mb-2">{{getTotalPrice() | currency : 'MAD'}}</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Discount:</p>
+              <p class="mb-2 text-danger">-10%</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Shipping cost:</p>
+              <p class="mb-2">+{{200 | currency : 'MAD'}}</p>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Final price:</p>
+              <p class="mb-2 fw-bold">{{getFinalPrice()  | currency : 'MAD'}} DH</p>
+            </div>
+  
+            <div class="input-group mt-3 mb-4">
+              <input type="text" class="form-control border" name="" placeholder="Promo code" />
+              <button class="btn btn-light text-dark border">Apply</button>
+            </div>
+  
+            <hr/>
+            <h4 class="text-dark my-4">Items in cart</h4>
+  
+            <div class="d-flex align-items-center mb-4" *ngFor="let p of Cart.itemsProduct">
+              <div class="me-3 position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                  1
+                </span>
+                <img [src]="p.itemProduct.productImage" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+              </div>
+              <div class="">
+                <strong>{{p.itemProduct.productTitle}}</strong>
+                <div class="price text-muted"><i>x{{p.quantity}}</i></div>
+                <div class="price text-muted"><i>{{p.itemProduct.productPrice*p.quantity}} DH</i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <router-outlet></router-outlet>

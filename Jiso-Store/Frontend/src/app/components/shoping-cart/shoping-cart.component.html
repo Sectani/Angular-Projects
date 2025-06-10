@@ -1,0 +1,169 @@
+<header>
+    <!-- Jumbotron -->
+    <div class="p-3 text-center bg-white border-bottom">
+      <div class="container">
+        <div class="row gy-3">
+          <!-- Left elements -->
+          <div class="col-lg-2 col-sm-4">
+            <i class="fas fa-shopping-cart me-2 "></i>
+            <span class="spn">Jiso Store</span>      
+          </div>
+          <!-- Left elements -->
+  
+          <!-- Right elements -->
+          <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+            <div class="d-flex float-end">
+              <a routerLink="/cart" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center bg-dark text-white">
+                <i class="fas fa-shopping-cart m-1 me-md-2"></i>
+                <p class="d-none d-md-block mb-0">My Cart</p>
+              </a>
+              <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/wishlist" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+                <i class="fas fa-heart m-1 me-md-2"></i>
+                <p class="d-none d-md-block mb-0">Wishlist</p>
+              </a>
+              <a *ngIf="user.role=='guest'" routerLink="/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"> 
+                <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Sign Up</p> 
+              </a>
+              <a *ngIf="user.role=='admin' || user.role=='user'" routerLink="/account" class="nav-link d-flex align-items-center">
+                <i class="fas fa-user-alt m-1 me-md-2"></i>
+              </a>
+              <a style="cursor: pointer;" (click)="logout()" *ngIf="user.role=='admin' || user.role=='user'" class=" nav-link d-flex align-items-center">
+                <i class="fas fa-sign-out-alt m-1 me-md-2"></i><!--p class="d-none d-md-block mb-0">Sign out</p-->
+              </a>
+            </div>
+          </div>
+          <!-- Right elements -->
+  
+          <!-- Center elements -->
+          <div class="col-lg-5 col-md-12 col-12">
+          </div>
+          <!-- Center elements -->
+        </div>
+      </div>
+    </div>
+    <!-- Jumbotron -->
+
+    <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <!-- Container wrapper -->
+    <div class="container justify-content-center justify-content-md-between">
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link text-white-50" routerLink="/home"><strong>Home</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50"  routerLink="/products"><strong>Products List</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/cart"><strong>Shoping cart</strong></a>
+          </li>
+        </ul>
+        <!-- Left links -->
+      </div>
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+  </header>
+  
+  <!-- cart + summary -->
+  <section class="bg-light my-5">
+    <div class="container">
+      <div class="row">
+        <!-- cart -->
+        <div class="col-lg-9">
+          <div class="card border shadow-0">
+
+            <div class="m-4">
+              <h4 *ngIf="Cart.itemsProduct.length == 0" class="card-title mb-4 center-text">Cart is empty</h4>
+              <div class="row gy-3 mb-4" *ngFor="let p of Cart.itemsProduct">
+                <div class="col-lg-5">
+                  <div class="me-lg-5">
+                    <div class="d-flex">
+                      <a routerLink="/details">
+                      <img [src]="p.itemProduct.productImage" class="border rounded me-3" style="width: 96px; height: 96px;" />
+                      </a>
+                      <div class="">
+                        <a routerLink="/details" class="nav-link"><strong>{{p.itemProduct.productTitle}}</strong></a>
+                        <p class="text-muted">{{p.itemProduct.productCategory}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                  <div style="align-items: center;">
+                    <div  class="me-4" style=" display: flex;align-items: center;;">
+                      <button class="border rounded" (click)="decrement(p)"><i class="fa fa-minus"></i></button>
+                      <input type="number" [ngModel]="p.quantity" placeholder="{{p.quantity}}"  min="1" max="{{p.itemProduct.productQuantity}}" disabled="" class="text-center"/>
+                      <button class="border rounded" (click)="increment(p)"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <small class="text-muted text-nowrap"><i> <strong> MAX : {{p.itemProduct.productQuantity}}</strong> </i></small>
+                  </div>
+                  <div class="">
+                    <span class="h6">{{p.itemProduct.productPrice*p.quantity | currency : 'MAD'}}</span> <br />
+                    <small class="text-muted text-nowrap"> {{p.itemProduct.productPrice | currency : 'MAD'}} / per item </small> <br />
+                    <small class="text-muted text-nowrap"> <i>x{{p.quantity}}</i> </small>
+                  </div>
+                </div>
+                <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                  <div class="float-md-end">
+                    <button (click)="remove(p)" class="btn btn-light border text-danger icon-hover-danger"> REMOVE</button>
+                  </div>
+                </div>
+              </div>
+            </div>  
+            
+        </div>
+        </div>
+        <!-- cart -->
+        <!-- summary -->
+        <div class="col-lg-3">
+          <div class="card mb-3 border shadow-0">
+            <div class="card-body">
+              <form>
+                <div class="form-group">
+                  <label class="form-label">Have coupon?</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control border" name="" placeholder="Coupon code" />
+                    <button class="btn btn-light border">Apply</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-0 border">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Total price:</p>
+                <p class="mb-2">{{ getTotalPrice() | currency : 'MAD'}}</p>
+              </div>
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Discount:</p>
+                <p class="mb-2 text-success">-10%</p>
+              </div>
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Shipping cost:</p>
+                <p class="mb-2">+{{200 | currency : 'MAD'}}</p>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Final price:</p>
+                <p class="mb-2 fw-bold">{{getFinalPrice() | currency : 'MAD'}} </p>
+              </div>
+  
+              <div class="mt-3">
+                <a routerLink="/checkout" [hidden]="getFinalPrice()<=200" class="btn btn-dark w-100 shadow-0 mb-2"> Make Purchase </a>
+                <a routerLink="/home" class="btn btn-light w-100 border mt-2"> Back to shop </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- summary -->
+      </div>
+    </div>
+  </section>
+  <!-- cart + summary -->
+  <section>
